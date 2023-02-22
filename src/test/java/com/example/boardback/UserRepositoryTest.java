@@ -1,10 +1,9 @@
-package com.example;
+package com.example.boardback;
 
 
 import com.example.boardback.entity.UserEntity;
 import com.example.boardback.repository.UserRepository;
 import com.example.boardback.service.UserService;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -42,7 +43,7 @@ class UserRepositoryTest {
 
         UserEntity savedUser = userRepository.save(userEntity);
         System.out.println(savedUser);
-        AssertionsForClassTypes.assertThat(userEntity.getUserId()).isEqualTo(savedUser.getUserId());
+        assertThat(userEntity.getUserId()).isEqualTo(savedUser.getUserId());
     }
 
     @DisplayName("2. 유저정보 검색 후 비밀번호 비교")
@@ -58,12 +59,11 @@ class UserRepositoryTest {
         String userId = "test_user";
         String userPw = "test_password";
         UserDetails user = userService.loadUserByUsername(userId);
-        System.out.println("user : " + user);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, userPw);
         authenticationManager.authenticate(authenticationToken);
 
-        AssertionsForClassTypes.assertThat(authenticationToken.getCredentials()).isEqualTo(userPw);
+        assertThat(authenticationToken.getCredentials()).isEqualTo(userPw);
 
         System.out.println("getCredentials: " + authenticationToken.getCredentials());
         System.out.println("userPw: " + userPw);
